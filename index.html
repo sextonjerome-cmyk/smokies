@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jerome's Smokies Grand Loop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E9EEE8; --paper:#F7F9F6; --ink:#17231C; --muted:#4F5F55;
+  --forest:#1F3B2D; --ridge:#3E5C76; --hivis:#E8B400; --line:#C9D3CB;
+  --shield-bg:#ffffff; --shield-ink:#17231C; --map-bg:#DDE7DF; --map-faint:#B7C4BA;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101813; --paper:#18221C; --ink:#E6ECE7; --muted:#9FB0A5;
+    --forest:#9CC8AE; --ridge:#8FB2D1; --hivis:#F2C230; --line:#2C3A31;
+    --shield-bg:#E6ECE7; --shield-ink:#101813; --map-bg:#1C2A22; --map-faint:#3A4B40;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101813; --paper:#18221C; --ink:#E6ECE7; --muted:#9FB0A5;
+  --forest:#9CC8AE; --ridge:#8FB2D1; --hivis:#F2C230; --line:#2C3A31;
+  --shield-bg:#E6ECE7; --shield-ink:#101813; --map-bg:#1C2A22; --map-faint:#3A4B40;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:0 18px 48px}
+
+header{padding:36px 0 22px;position:relative}
+header svg{display:block;width:100%;height:auto;color:var(--forest);margin-bottom:14px}
+h1{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:700;font-size:clamp(44px,13vw,68px);line-height:.92;margin:0;letter-spacing:-.5px;color:var(--forest)}
+.sub{margin:10px 0 0;color:var(--muted);font-size:16px;max-width:34em}
+.stats{display:flex;gap:22px;margin-top:18px;flex-wrap:wrap}
+.stats div{font-size:14px;color:var(--muted)}
+.stats b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:28px;line-height:1;color:var(--ink)}
+
+.camps{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:6px 0 26px}
+.camps h2{font-family:"Barlow Condensed",sans-serif;font-size:22px;margin:0 0 6px;color:var(--forest)}
+.camps p{margin:4px 0;font-size:15px}
+
+ol.days{list-style:none;margin:0;padding:0;position:relative}
+ol.days::before{content:"";position:absolute;left:21px;top:8px;bottom:8px;border-left:3px dashed var(--line)}
+.day{position:relative;padding-left:58px;margin-bottom:22px}
+.num{position:absolute;left:0;top:2px;width:45px;height:45px;border-radius:50%;background:var(--forest);color:var(--bg);font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:24px;display:grid;place-items:center;border:3px solid var(--bg)}
+.day.done .num{background:var(--hivis);color:#17231C}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.day.big .card{border-left:5px solid var(--hivis)}
+.card h3{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:25px;line-height:1.05;margin:0}
+.meta{color:var(--muted);font-size:14.5px;margin:4px 0 10px}
+.shields{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.shield{font-family:"Barlow Condensed",sans-serif;font-weight:700;font-size:14px;background:var(--shield-bg);color:var(--shield-ink);border:2px solid var(--shield-ink);border-radius:6px 6px 12px 12px;padding:1px 8px 2px;white-space:nowrap}
+.shield.named{border-radius:4px;background:var(--ridge);color:#fff;border-color:var(--ridge)}
+.route{margin:0 0 8px;font-size:16px}
+.tip{font-size:14.5px;color:var(--muted);margin:6px 0 0}
+.tip strong{color:var(--ink);font-weight:600}
+.actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.btn{font:600 15px "Barlow",sans-serif;text-decoration:none;border-radius:10px;padding:9px 14px;border:2px solid var(--forest);color:var(--forest);background:transparent;cursor:pointer;min-height:44px;display:inline-flex;align-items:center}
+.btn.primary{background:var(--forest);color:var(--bg)}
+.btn:focus-visible{outline:3px solid var(--hivis);outline-offset:2px}
+
+section.notes{margin-top:30px}
+section.notes h2{font-family:"Barlow Condensed",sans-serif;font-size:28px;margin:0 0 10px;color:var(--forest)}
+.note{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-bottom:10px;font-size:15.5px}
+.note b{font-weight:600}
+footer{margin-top:26px;font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.num{transition:background .2s}}
+
+.map{display:block;width:100%;height:auto;border-radius:10px;margin:0 0 12px;border:1px solid var(--line)}
+.mbg{fill:var(--map-bg)}
+.mfaint{fill:none;stroke:var(--map-faint);stroke-width:2;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+.mroute{fill:none;stroke:var(--forest);stroke-width:4;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+.mroute.dash{stroke-dasharray:9 6}
+.mdot{fill:var(--paper);stroke:var(--forest);stroke-width:2;vector-effect:non-scaling-stroke}
+.mend{fill:var(--forest);stroke:var(--paper);stroke-width:2;vector-effect:non-scaling-stroke}
+.mcamp{fill:var(--hivis);stroke:var(--ink);stroke-width:1.5;vector-effect:non-scaling-stroke}
+.ml{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:600;fill:var(--ink);paint-order:stroke;stroke:var(--map-bg);stroke-width:3px;stroke-linejoin:round}
+.ms{font-family:"Barlow",sans-serif;font-style:italic;fill:var(--muted);opacity:.7;text-anchor:middle}
+.mbadge{fill:var(--hivis);stroke:var(--ink);stroke-width:1.5;vector-effect:non-scaling-stroke}
+.mbt{font-family:"Barlow Condensed",sans-serif;font-weight:700;fill:#17231C;text-anchor:middle}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px;color:var(--muted);margin:-4px 0 18px}
+.legend span::before{content:"";display:inline-block;vertical-align:middle;margin-right:6px}
+.lg-camp::before{width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:12px solid var(--hivis)}
+.lg-route::before{width:22px;height:4px;background:var(--forest);border-radius:2px}
+
+.live{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:6px 0 26px}
+.live h2{font-family:"Barlow Condensed",sans-serif;font-size:26px;margin:0 0 4px;color:var(--forest)}
+.live p{margin:4px 0 10px;font-size:15px;color:var(--muted)}
+.live .frame{position:relative;width:100%;aspect-ratio:1/1;max-height:70vh;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--map-bg)}
+.live iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.live .actions{margin-top:12px}
+.pulse{display:inline-block;width:10px;height:10px;border-radius:50%;background:#D93F3F;margin-right:6px;vertical-align:middle;animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(217,63,63,.6)}70%{box-shadow:0 0 0 9px rgba(217,63,63,0)}100%{box-shadow:0 0 0 0 rgba(217,63,63,0)}}
+@media (prefers-reduced-motion:reduce){.pulse{animation:none}}
+.intro{font-size:16px;margin:0 0 22px}
+.hl{margin:8px 0 0;padding:0 0 0 18px;font-size:15.5px}
+.hl li{margin:3px 0}
+.hl li b{font-weight:600}
+.night{font-size:14.5px;color:var(--muted);margin:10px 0 0;padding-top:8px;border-top:1px dashed var(--line)}
+.night b{color:var(--ink);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <svg viewBox="0 0 600 70" aria-hidden="true"><path d="M0 62 L40 44 L70 52 L110 26 L150 40 L185 18 L220 34 L260 8 L300 30 L330 22 L370 42 L410 16 L450 36 L490 24 L530 46 L570 30 L600 40 L600 70 L0 70Z" fill="currentColor" opacity=".18"/><path d="M0 62 L40 44 L70 52 L110 26 L150 40 L185 18 L220 34 L260 8 L300 30 L330 22 L370 42 L410 16 L450 36 L490 24 L530 46 L570 30 L600 40" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg>
+  <h1>Smokies Grand Loop</h1>
+  <p class="sub">Jerome's seven-day motorcycle camping loop through the Blue Ridge and the Smokies on a BMW G310 GS. Two free forest camps, every road on the list, and one pass on the Dragon.</p>
+  <div class="stats">
+    <div><b>7</b>days</div>
+    <div><b>~1,100</b>miles</div>
+    <div><b>2</b>camps</div>
+  </div>
+</header>
+
+<section class="live" id="live">
+  <h2><span class="pulse" aria-hidden="true"></span>Where's Jerome right now</h2>
+  <p>Live from his phone while he's riding. If the map is empty, he's between shares, out of cell range in a gorge, or in camp for the night.</p>
+  <div class="frame"><iframe src="https://glympse.com/!jeromerides26gs" title="Live location map" loading="lazy" allow="geolocation" referrerpolicy="no-referrer"></iframe></div>
+  <div class="actions"><a class="btn primary" target="_blank" rel="noopener" href="https://glympse.com/!jeromerides26gs">Open live map full screen</a></div>
+</section>
+
+<p class="intro">The plan: fly in at Triple Tree, ride up into the mountains, base at two free national-forest camps, and ride the famous roads unloaded on day loops. Each day below has the route, a sketch map, and a button that opens turn-by-turn directions.</p>
+<div class="overview"><svg class="map" viewBox="102.0 83.1 916.0 631.7" role="img" aria-label="Trip overview map"><rect x="102.0" y="83.1" width="916.0" height="631.7" class="mbg"/><text x="310.5" y="152.0" font-size="34.6" class="ms">Tennessee</text><text x="670.1" y="192.0" font-size="34.6" class="ms">North Carolina</text><text x="702.7" y="592.0" font-size="34.6" class="ms">South Carolina</text><polyline points="981.2,610.0 863.9,526.8 807.3,452.0 776.0,437.6 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 720.1,353.6 656.3,334.8 608.0,295.2 550.8,289.2 507.0,307.6 460.2,347.6 422.3,382.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 339.9,340.0 317.1,348.0 271.3,334.0 230.4,334.4 268.7,350.4" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 337.3,257.6 389.0,188.0 406.9,210.0 478.2,206.0 514.8,235.6 550.8,289.2 507.0,307.6 470.7,332.0 431.5,328.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 385.7,306.0 431.5,328.0 470.7,332.0 528.9,407.2 565.5,433.2 589.3,458.8 621.7,435.6 711.2,422.8 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 776.3,286.8" class="mfaint"/><polyline points="981.2,610.0 863.9,526.8 807.3,452.0 776.0,437.6 740.7,386.8 767.8,339.6" class="mroute"/><polyline points="767.8,339.6 720.1,353.6 656.3,334.8 608.0,295.2 550.8,289.2 507.0,307.6 460.2,347.6 422.3,382.0 389.9,350.8 366.1,326.0" class="mroute"/><polyline points="366.1,326.0 339.9,340.0 317.1,348.0 271.3,334.0 230.4,334.4 268.7,350.4" class="mroute"/><polyline points="366.1,326.0 353.3,293.2 337.3,257.6 389.0,188.0 406.9,210.0 478.2,206.0 514.8,235.6 550.8,289.2 507.0,307.6 470.7,332.0 431.5,328.0 389.9,350.8 366.1,326.0" class="mroute"/><polyline points="366.1,326.0 353.3,293.2 385.7,306.0 431.5,328.0 470.7,332.0 528.9,407.2 565.5,433.2 589.3,458.8 621.7,435.6 711.2,422.8 740.7,386.8 767.8,339.6" class="mroute"/><polyline points="767.8,339.6 776.3,286.8" class="mroute"/><text x="981.2" y="689.1" font-size="29.7" class="ml" text-anchor="end">Day 7 home to Charleston ↘</text><circle cx="807.3" cy="452.0" r="28.0" class="mbadge"/><text x="807.3" y="463.9" font-size="33.0" class="mbt">1</text><circle cx="608.0" cy="295.2" r="28.0" class="mbadge"/><text x="608.0" y="307.1" font-size="33.0" class="mbt">2</text><circle cx="271.3" cy="334.0" r="28.0" class="mbadge"/><text x="271.3" y="345.9" font-size="33.0" class="mbt">3</text><circle cx="478.2" cy="206.0" r="28.0" class="mbadge"/><text x="478.2" y="217.9" font-size="33.0" class="mbt">4</text><circle cx="528.9" cy="407.2" r="28.0" class="mbadge"/><text x="528.9" y="419.1" font-size="33.0" class="mbt">5</text><circle cx="776.3" cy="286.8" r="28.0" class="mbadge"/><text x="776.3" y="298.7" font-size="33.0" class="mbt">6</text><circle cx="981.2" cy="610.0" r="7.3" class="mdot"/><text x="963.1" y="600.1" font-size="33.0" class="ml" text-anchor="end">Triple Tree</text><circle cx="863.9" cy="526.8" r="7.3" class="mdot"/><text x="845.7" y="516.9" font-size="33.0" class="ml" text-anchor="end">Greenville</text><path d="M767.8 309.9 L744.0 354.4 L791.5 354.4Z" class="mcamp"/><text x="785.9" y="329.7" font-size="33.0" class="ml">Wash Creek</text><circle cx="550.8" cy="289.2" r="7.3" class="mdot"/><text x="550.8" y="259.5" font-size="33.0" class="ml" text-anchor="middle">Cherokee</text><path d="M366.1 296.3 L342.3 340.8 L389.8 340.8Z" class="mcamp"/><text x="366.1" y="296.3" font-size="33.0" class="ml" text-anchor="middle">Lake Santeetlah</text><circle cx="230.4" cy="334.4" r="7.3" class="mdot"/><text x="230.4" y="382.2" font-size="33.0" class="ml" text-anchor="middle">Tellico Plains</text><circle cx="406.9" cy="210.0" r="7.3" class="mdot"/><text x="406.9" y="180.3" font-size="33.0" class="ml" text-anchor="middle">Townsend</text><circle cx="589.3" cy="458.8" r="7.3" class="mdot"/><text x="589.3" y="506.6" font-size="33.0" class="ml" text-anchor="middle">Highlands</text></svg><div class="legend"><span class="lg-route">Route</span><span class="lg-camp">Camp</span></div></div>
+<div class="camps">
+  <h2>Camps</h2>
+  <p><strong>Wash Creek</strong>, on Yellow Gap Rd in Pisgah. Free dispersed sites near North Mills River. Nights 1, 5 and 6.</p>
+  <p><strong>Lake Santeetlah</strong>, on Pine Ridge Rd north of Robbinsville off US 129. Free dispersed sites marked with brown numbered posts. Nights 2 to 4.</p>
+</div>
+
+<ol class="days" id="days">
+  <li class="day" data-day="1">
+    <span class="num">1</span>
+    <div class="card">
+      <h3>Triple Tree to Wash Creek</h3>
+      <p class="meta">About 110 miles, 3 hours riding. No interstate.</p><svg class="map" viewBox="568.9 292.3 584.1 365.0" role="img" aria-label="Map of day 1"><rect x="568.9" y="292.3" width="584.1" height="365.0" class="mbg"/><text x="310.5" y="152.0" font-size="20.9" class="ms">Tennessee</text><text x="670.1" y="192.0" font-size="20.9" class="ms">North Carolina</text><text x="702.7" y="592.0" font-size="20.9" class="ms">South Carolina</text><polyline points="981.2,610.0 863.9,526.8 807.3,452.0 776.0,437.6 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 720.1,353.6 656.3,334.8 608.0,295.2 550.8,289.2 507.0,307.6 460.2,347.6 422.3,382.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 339.9,340.0 317.1,348.0 271.3,334.0 230.4,334.4 268.7,350.4" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 337.3,257.6 389.0,188.0 406.9,210.0 478.2,206.0 514.8,235.6 550.8,289.2 507.0,307.6 470.7,332.0 431.5,328.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 385.7,306.0 431.5,328.0 470.7,332.0 528.9,407.2 565.5,433.2 589.3,458.8 621.7,435.6 711.2,422.8 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 776.3,286.8" class="mfaint"/><polyline points="767.8,339.6 740.7,386.8 1002.8,500.4 1297.6,880.0 1656.8,1369.2" class="mfaint"/><polyline points="981.2,610.0 863.9,526.8 807.3,452.0 776.0,437.6 740.7,386.8 767.8,339.6" class="mroute"/><circle cx="981.2" cy="610.0" r="6.5" class="mend"/><circle cx="767.8" cy="339.6" r="6.5" class="mend"/><circle cx="981.2" cy="610.0" r="4.7" class="mdot"/><text x="970.3" y="604.0" font-size="19.9" class="ml" text-anchor="end">Triple Tree</text><circle cx="863.9" cy="526.8" r="4.7" class="mdot"/><text x="874.8" y="520.8" font-size="19.9" class="ml">Greenville</text><circle cx="776.0" cy="437.6" r="4.7" class="mdot"/><text x="786.9" y="431.6" font-size="19.9" class="ml">Caesars Head</text><circle cx="740.7" cy="386.8" r="4.7" class="mdot"/><text x="751.6" y="380.8" font-size="19.9" class="ml">Brevard</text><path d="M767.8 321.7 L753.5 348.5 L782.1 348.5Z" class="mcamp"/><text x="778.7" y="333.6" font-size="19.9" class="ml">Wash Creek</text></svg>
+      <div class="shields"><span class="shield">SC 11</span><span class="shield">US 276</span></div>
+      <p class="route">Leave Triple Tree and stop at Cycle Gear in Greenville. Pick up SC 11, then take US 276 up the escarpment past Caesars Head. Continue through Brevard to Wash Creek.</p>
+      <p class="tip"><strong>Cycle Gear</strong> opens at 10 AM on Sundays. The address is 2017 Wade Hampton Blvd.</p>
+      <ul class="hl"><li><b>Cycle Gear, Greenville</b> for bike pads, first stop of the trip.</li><li><b>SC 11</b>, the Cherokee Foothills Scenic Highway, along the base of the escarpment.</li><li><b>US 276 up Caesars Head</b>: tight switchbacks and a big overlook at the top.</li><li>Through Brevard, then into Pisgah National Forest.</li></ul><p class="night"><b>Tonight:</b> Wash Creek, a free dispersed site on Yellow Gap Rd. Jerome camped here on a past trip.</p><div class="actions"><a class="btn primary" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Triple+Tree+Aerodrome,+Woodruff,+SC&destination=Yellow+Gap+Road,+Pisgah+National+Forest,+NC&waypoints=Cycle+Gear,+2017+Wade+Hampton+Blvd,+Greenville,+SC|Caesars+Head+State+Park,+SC|Brevard,+NC&travelmode=driving">Open in Maps</a><button class="btn" type="button">Mark done</button></div>
+    </div>
+  </li>
+
+  <li class="day" data-day="2">
+    <span class="num">2</span>
+    <div class="card">
+      <h3>Blue Ridge Parkway to Santeetlah</h3>
+      <p class="meta">About 135 miles, 4 hours riding.</p><svg class="map" viewBox="295.8 166.1 542.3 338.9" role="img" aria-label="Map of day 2"><rect x="295.8" y="166.1" width="542.3" height="338.9" class="mbg"/><text x="310.5" y="152.0" font-size="19.4" class="ms">Tennessee</text><text x="670.1" y="192.0" font-size="19.4" class="ms">North Carolina</text><text x="702.7" y="592.0" font-size="19.4" class="ms">South Carolina</text><polyline points="981.2,610.0 863.9,526.8 807.3,452.0 776.0,437.6 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 720.1,353.6 656.3,334.8 608.0,295.2 550.8,289.2 507.0,307.6 460.2,347.6 422.3,382.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 339.9,340.0 317.1,348.0 271.3,334.0 230.4,334.4 268.7,350.4" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 337.3,257.6 389.0,188.0 406.9,210.0 478.2,206.0 514.8,235.6 550.8,289.2 507.0,307.6 470.7,332.0 431.5,328.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 385.7,306.0 431.5,328.0 470.7,332.0 528.9,407.2 565.5,433.2 589.3,458.8 621.7,435.6 711.2,422.8 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 776.3,286.8" class="mfaint"/><polyline points="767.8,339.6 740.7,386.8 1002.8,500.4 1297.6,880.0 1656.8,1369.2" class="mfaint"/><polyline points="767.8,339.6 720.1,353.6 656.3,334.8 608.0,295.2 550.8,289.2 507.0,307.6 460.2,347.6 422.3,382.0 389.9,350.8 366.1,326.0" class="mroute"/><circle cx="767.8" cy="339.6" r="6.1" class="mend"/><circle cx="366.1" cy="326.0" r="6.1" class="mend"/><path d="M767.8 323.0 L754.5 347.9 L781.1 347.9Z" class="mcamp"/><text x="767.8" y="323.0" font-size="18.4" class="ml" text-anchor="middle">Wash Creek</text><circle cx="656.3" cy="334.8" r="4.3" class="mdot"/><text x="656.3" y="361.5" font-size="18.4" class="ml" text-anchor="middle">Richland Balsam</text><circle cx="550.8" cy="289.2" r="4.3" class="mdot"/><text x="550.8" y="272.6" font-size="18.4" class="ml" text-anchor="middle">Cherokee</text><circle cx="460.2" cy="347.6" r="4.3" class="mdot"/><text x="460.2" y="374.3" font-size="18.4" class="ml" text-anchor="middle">Nantahala Gorge</text><path d="M366.1 309.4 L352.8 334.3 L379.4 334.3Z" class="mcamp"/><text x="366.1" y="309.4" font-size="18.4" class="ml" text-anchor="middle">Lake Santeetlah</text></svg>
+      <div class="shields"><span class="shield named">Blue Ridge Pkwy</span><span class="shield">US 19/74</span><span class="shield">US 129</span></div>
+      <p class="route">Ride the Parkway south along its highest stretch, past Richland Balsam, all the way to its end in Cherokee. Then go through Bryson City and the Nantahala Gorge, on to Robbinsville, and set up camp at Lake Santeetlah.</p>
+      <p class="tip"><strong>Check before you go:</strong> look at the NPS road status page for closures around Devil's Courthouse (MP 422). If it's closed, detour through Waynesville and Maggie Valley and rejoin the Parkway at Soco Gap.</p>
+      <ul class="hl"><li><b>Blue Ridge Parkway</b> from US 276 south, the highest section of the whole Parkway.</li><li><b>Richland Balsam</b>, the Parkway's highest point at 6,053 ft.</li><li>Parkway ends in <b>Cherokee</b>, then US 19/74 through the <b>Nantahala Gorge</b> past the rafting put-ins.</li><li>Fuel and supplies in Robbinsville before heading to the lake.</li></ul><p class="night"><b>Tonight:</b> Lake Santeetlah, free dispersed sites on Pine Ridge Rd. Home base for three nights.</p><div class="actions"><a class="btn primary" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Yellow+Gap+Road,+Pisgah+National+Forest,+NC&destination=Lake+Santeetlah,+NC&waypoints=Richland+Balsam+Overlook|Cherokee,+NC|Nantahala+Outdoor+Center&travelmode=driving">Open in Maps</a><a class="btn" target="_blank" rel="noopener" href="https://www.nps.gov/blri/planyourvisit/roadclosures.htm">Parkway status</a><button class="btn" type="button">Mark done</button></div>
+    </div>
+  </li>
+
+  <li class="day" data-day="3">
+    <span class="num">3</span>
+    <div class="card">
+      <h3>Cherohala out and back</h3>
+      <p class="meta">About 110 miles, 3.5 hours riding. Unloaded bike.</p><svg class="map" viewBox="190.3 270.7 216.0 135.0" role="img" aria-label="Map of day 3"><rect x="190.3" y="270.7" width="216.0" height="135.0" class="mbg"/><text x="310.5" y="152.0" font-size="7.7" class="ms">Tennessee</text><text x="670.1" y="192.0" font-size="7.7" class="ms">North Carolina</text><text x="702.7" y="592.0" font-size="7.7" class="ms">South Carolina</text><polyline points="981.2,610.0 863.9,526.8 807.3,452.0 776.0,437.6 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 720.1,353.6 656.3,334.8 608.0,295.2 550.8,289.2 507.0,307.6 460.2,347.6 422.3,382.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 339.9,340.0 317.1,348.0 271.3,334.0 230.4,334.4 268.7,350.4" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 337.3,257.6 389.0,188.0 406.9,210.0 478.2,206.0 514.8,235.6 550.8,289.2 507.0,307.6 470.7,332.0 431.5,328.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 385.7,306.0 431.5,328.0 470.7,332.0 528.9,407.2 565.5,433.2 589.3,458.8 621.7,435.6 711.2,422.8 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 776.3,286.8" class="mfaint"/><polyline points="767.8,339.6 740.7,386.8 1002.8,500.4 1297.6,880.0 1656.8,1369.2" class="mfaint"/><polyline points="366.1,326.0 339.9,340.0 317.1,348.0 271.3,334.0 230.4,334.4 268.7,350.4" class="mroute dash"/><circle cx="366.1" cy="326.0" r="2.4" class="mend"/><circle cx="268.7" cy="350.4" r="2.4" class="mend"/><path d="M366.1 319.4 L360.8 329.3 L371.4 329.3Z" class="mcamp"/><text x="366.1" y="319.4" font-size="7.3" class="ml" text-anchor="middle">Lake Santeetlah</text><circle cx="317.1" cy="348.0" r="1.7" class="mdot"/><text x="317.1" y="358.6" font-size="7.3" class="ml" text-anchor="middle">Beech Gap</text><circle cx="230.4" cy="334.4" r="1.7" class="mdot"/><text x="230.4" y="327.8" font-size="7.3" class="ml" text-anchor="middle">Tellico Plains</text><circle cx="268.7" cy="350.4" r="1.7" class="mdot"/><text x="268.7" y="361.0" font-size="7.3" class="ml" text-anchor="middle">Bald River Falls</text></svg>
+      <div class="shields"><span class="shield named">Cherohala Skyway</span><span class="shield">River Rd</span></div>
+      <p class="route">Ride the Skyway west to Tellico Plains and have lunch in town. Then take River Rd to Bald River Falls, which you can see right from the road. Ride back over the Skyway to camp.</p>
+      <p class="tip">This is the one road you ride both ways, and it's just as good going east.</p>
+      <ul class="hl"><li><b>Cherohala Skyway</b>: 43 miles, no towns, no gas, up to 5,400 ft. Fill up in Robbinsville.</li><li>Lunch in <b>Tellico Plains</b>.</li><li><b>Bald River Falls</b>, a 90-ft waterfall visible right from the bridge on River Rd.</li><li>Skyway again on the way back, with the afternoon light the other way.</li></ul><p class="night"><b>Tonight:</b> Back at Lake Santeetlah. Tent stays pitched all day.</p><div class="actions"><a class="btn primary" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Lake+Santeetlah,+NC&destination=Bald+River+Falls,+Tellico+Plains,+TN&waypoints=Tellico+Plains,+TN&travelmode=driving">Open in Maps</a><button class="btn" type="button">Mark done</button></div>
+    </div>
+  </li>
+
+  <li class="day big" data-day="4">
+    <span class="num">4</span>
+    <div class="card">
+      <h3>The Dragon and the Smokies</h3>
+      <p class="meta">About 170 miles, 5.5 hours riding. This is the big day, so start early.</p><svg class="map" viewBox="268.2 159.5 351.6 219.8" role="img" aria-label="Map of day 4"><rect x="268.2" y="159.5" width="351.6" height="219.8" class="mbg"/><text x="310.5" y="152.0" font-size="12.6" class="ms">Tennessee</text><text x="670.1" y="192.0" font-size="12.6" class="ms">North Carolina</text><text x="702.7" y="592.0" font-size="12.6" class="ms">South Carolina</text><polyline points="981.2,610.0 863.9,526.8 807.3,452.0 776.0,437.6 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 720.1,353.6 656.3,334.8 608.0,295.2 550.8,289.2 507.0,307.6 460.2,347.6 422.3,382.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 339.9,340.0 317.1,348.0 271.3,334.0 230.4,334.4 268.7,350.4" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 337.3,257.6 389.0,188.0 406.9,210.0 478.2,206.0 514.8,235.6 550.8,289.2 507.0,307.6 470.7,332.0 431.5,328.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 385.7,306.0 431.5,328.0 470.7,332.0 528.9,407.2 565.5,433.2 589.3,458.8 621.7,435.6 711.2,422.8 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 776.3,286.8" class="mfaint"/><polyline points="767.8,339.6 740.7,386.8 1002.8,500.4 1297.6,880.0 1656.8,1369.2" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 337.3,257.6 389.0,188.0 406.9,210.0 478.2,206.0 514.8,235.6 550.8,289.2 507.0,307.6 470.7,332.0 431.5,328.0 389.9,350.8 366.1,326.0" class="mroute"/><circle cx="366.1" cy="326.0" r="3.9" class="mend"/><circle cx="366.1" cy="326.0" r="3.9" class="mend"/><path d="M366.1 315.2 L357.5 331.4 L374.7 331.4Z" class="mcamp"/><text x="372.7" y="322.4" font-size="12.0" class="ml">Lake Santeetlah</text><circle cx="353.3" cy="293.2" r="2.8" class="mdot"/><text x="346.8" y="289.6" font-size="12.0" class="ml" text-anchor="end">Deals Gap</text><circle cx="337.3" cy="257.6" r="2.8" class="mdot"/><text x="343.9" y="254.0" font-size="12.0" class="ml">End of the Dragon</text><circle cx="389.0" cy="188.0" r="2.8" class="mdot"/><text x="389.0" y="177.2" font-size="12.0" class="ml" text-anchor="middle">Walland</text><circle cx="406.9" cy="210.0" r="2.8" class="mdot"/><text x="406.9" y="227.3" font-size="12.0" class="ml" text-anchor="middle">Townsend</text><circle cx="514.8" cy="235.6" r="2.8" class="mdot"/><text x="521.4" y="232.0" font-size="12.0" class="ml">Newfound Gap</text><circle cx="550.8" cy="289.2" r="2.8" class="mdot"/><text x="550.8" y="306.5" font-size="12.0" class="ml" text-anchor="middle">Cherokee</text><circle cx="507.0" cy="307.6" r="2.8" class="mdot"/><text x="507.0" y="324.9" font-size="12.0" class="ml" text-anchor="middle">Bryson City</text><circle cx="389.9" cy="350.8" r="2.8" class="mdot"/><text x="389.9" y="368.1" font-size="12.0" class="ml" text-anchor="middle">Robbinsville</text></svg>
+      <div class="shields"><span class="shield">US 129 Dragon</span><span class="shield named">Foothills Pkwy</span><span class="shield">US 321</span><span class="shield">US 441</span><span class="shield">NC 143</span></div>
+      <p class="route">Fuel up at Deals Gap, then ride the Dragon north. That's your only pass. Pick up the Foothills Parkway to Walland, then 321 to Townsend. Take Little River Rd to Sugarlands, then 441 south over Newfound Gap to Cherokee. Head back through Bryson City and NC 143 to camp.</p>
+      <p class="tip">In the Smokies you need a <strong>parking tag</strong> if you park longer than 15 minutes.</p>
+      <ul class="hl"><li><b>Tail of the Dragon</b>: 318 curves in 11 miles. Ridden once, northbound, on an unloaded bike.</li><li><b>Foothills Parkway</b>, a quiet ridge-top road with views back over the Smokies.</li><li><b>Townsend</b>, the quiet side of the Smokies, then Little River Rd along the water.</li><li><b>Newfound Gap</b> on US 441: over 5,000 ft, crossing back into North Carolina on the state line.</li><li>Loop closes through Cherokee, Bryson City and NC 143.</li></ul><p class="night"><b>Tonight:</b> Back at Lake Santeetlah. Last night at the lake.</p><div class="actions"><a class="btn primary" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Lake+Santeetlah,+NC&destination=Lake+Santeetlah,+NC&waypoints=Deals+Gap+Motorcycle+Resort|Foothills+Parkway,+Walland,+TN|Townsend,+TN|Newfound+Gap|Cherokee,+NC|Robbinsville,+NC&travelmode=driving">Open in Maps</a><button class="btn" type="button">Mark done</button></div>
+    </div>
+  </li>
+
+  <li class="day big" data-day="5">
+    <span class="num">5</span>
+    <div class="card">
+      <h3>Moonshiner 28 back to Wash Creek</h3>
+      <p class="meta">About 170 miles, 5.5 hours riding. Break camp.</p><svg class="map" viewBox="280.8 201.2 559.5 349.7" role="img" aria-label="Map of day 5"><rect x="280.8" y="201.2" width="559.5" height="349.7" class="mbg"/><text x="310.5" y="152.0" font-size="20.0" class="ms">Tennessee</text><text x="670.1" y="192.0" font-size="20.0" class="ms">North Carolina</text><text x="702.7" y="592.0" font-size="20.0" class="ms">South Carolina</text><polyline points="981.2,610.0 863.9,526.8 807.3,452.0 776.0,437.6 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 720.1,353.6 656.3,334.8 608.0,295.2 550.8,289.2 507.0,307.6 460.2,347.6 422.3,382.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 339.9,340.0 317.1,348.0 271.3,334.0 230.4,334.4 268.7,350.4" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 337.3,257.6 389.0,188.0 406.9,210.0 478.2,206.0 514.8,235.6 550.8,289.2 507.0,307.6 470.7,332.0 431.5,328.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 385.7,306.0 431.5,328.0 470.7,332.0 528.9,407.2 565.5,433.2 589.3,458.8 621.7,435.6 711.2,422.8 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 776.3,286.8" class="mfaint"/><polyline points="767.8,339.6 740.7,386.8 1002.8,500.4 1297.6,880.0 1656.8,1369.2" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 385.7,306.0 431.5,328.0 470.7,332.0 528.9,407.2 565.5,433.2 589.3,458.8 621.7,435.6 711.2,422.8 740.7,386.8 767.8,339.6" class="mroute"/><circle cx="366.1" cy="326.0" r="6.3" class="mend"/><circle cx="767.8" cy="339.6" r="6.3" class="mend"/><path d="M366.1 308.9 L352.4 334.6 L379.8 334.6Z" class="mcamp"/><text x="366.1" y="353.6" font-size="19.0" class="ml" text-anchor="middle">Lake Santeetlah</text><circle cx="353.3" cy="293.2" r="4.5" class="mdot"/><text x="353.3" y="276.1" font-size="19.0" class="ml" text-anchor="middle">Deals Gap</text><circle cx="385.7" cy="306.0" r="4.5" class="mdot"/><text x="396.2" y="300.3" font-size="19.0" class="ml">Fontana</text><circle cx="528.9" cy="407.2" r="4.5" class="mdot"/><text x="528.9" y="390.1" font-size="19.0" class="ml" text-anchor="middle">Franklin</text><circle cx="565.5" cy="433.2" r="4.5" class="mdot"/><text x="555.0" y="427.5" font-size="19.0" class="ml" text-anchor="end">Cullasaja Falls</text><circle cx="589.3" cy="458.8" r="4.5" class="mdot"/><text x="589.3" y="486.4" font-size="19.0" class="ml" text-anchor="middle">Highlands</text><circle cx="621.7" cy="435.6" r="4.5" class="mdot"/><text x="621.7" y="418.5" font-size="19.0" class="ml" text-anchor="middle">Cashiers</text><circle cx="740.7" cy="386.8" r="4.5" class="mdot"/><text x="740.7" y="414.4" font-size="19.0" class="ml" text-anchor="middle">Brevard</text><path d="M767.8 322.5 L754.1 348.2 L781.5 348.2Z" class="mcamp"/><text x="767.8" y="322.5" font-size="19.0" class="ml" text-anchor="middle">Wash Creek</text></svg>
+      <div class="shields"><span class="shield">NC 28</span><span class="shield">US 64</span></div>
+      <p class="route">Start at Deals Gap and ride 28 past Fontana and Stecoah to Franklin. Then go through the Cullasaja Gorge to Highlands, and on through Cashiers and down US 64 to Brevard and Wash Creek.</p>
+      <p class="tip">Cullasaja Falls only has a small roadside pull-off, so watch for it.</p>
+      <ul class="hl"><li><b>Moonshiner 28</b>, the old bootlegging road along Fontana Lake.</li><li><b>Fontana Dam</b>, the tallest dam in the eastern US, right beside the road.</li><li><b>Cullasaja Gorge</b> on US 64: the road is cut into the cliff, with Dry Falls and Bridal Veil Falls near Highlands.</li><li>Highlands and Cashiers, then down the escarpment to Brevard.</li></ul><p class="night"><b>Tonight:</b> Wash Creek again. Loaded bike all day, so an easier pace.</p><div class="actions"><a class="btn primary" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Lake+Santeetlah,+NC&destination=Yellow+Gap+Road,+Pisgah+National+Forest,+NC&waypoints=Deals+Gap+Motorcycle+Resort|Fontana+Dam,+NC|Franklin,+NC|Cullasaja+Falls|Highlands,+NC|Cashiers,+NC&travelmode=driving">Open in Maps</a><button class="btn" type="button">Mark done</button></div>
+    </div>
+  </li>
+
+  <li class="day" data-day="6">
+    <span class="num">6</span>
+    <div class="card">
+      <h3>Flex day at Wash Creek</h3>
+      <p class="meta">Ride as much or as little as you like.</p><svg class="map" viewBox="640.2 269.3 216.0 135.0" role="img" aria-label="Map of day 6"><rect x="640.2" y="269.3" width="216.0" height="135.0" class="mbg"/><text x="310.5" y="152.0" font-size="7.7" class="ms">Tennessee</text><text x="670.1" y="192.0" font-size="7.7" class="ms">North Carolina</text><text x="702.7" y="592.0" font-size="7.7" class="ms">South Carolina</text><polyline points="981.2,610.0 863.9,526.8 807.3,452.0 776.0,437.6 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 720.1,353.6 656.3,334.8 608.0,295.2 550.8,289.2 507.0,307.6 460.2,347.6 422.3,382.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 339.9,340.0 317.1,348.0 271.3,334.0 230.4,334.4 268.7,350.4" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 337.3,257.6 389.0,188.0 406.9,210.0 478.2,206.0 514.8,235.6 550.8,289.2 507.0,307.6 470.7,332.0 431.5,328.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 385.7,306.0 431.5,328.0 470.7,332.0 528.9,407.2 565.5,433.2 589.3,458.8 621.7,435.6 711.2,422.8 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 776.3,286.8" class="mfaint"/><polyline points="767.8,339.6 740.7,386.8 1002.8,500.4 1297.6,880.0 1656.8,1369.2" class="mfaint"/><polyline points="767.8,339.6 776.3,286.8" class="mroute"/><circle cx="767.8" cy="339.6" r="2.4" class="mend"/><circle cx="776.3" cy="286.8" r="2.4" class="mend"/><path d="M767.8 333.0 L762.5 342.9 L773.1 342.9Z" class="mcamp"/><text x="771.8" y="337.4" font-size="7.3" class="ml">Wash Creek</text><circle cx="776.3" cy="286.8" r="1.7" class="mdot"/><text x="780.3" y="284.6" font-size="7.3" class="ml">Lake Powhatan</text><circle cx="740.7" cy="386.8" r="1.7" class="mdot"/><text x="736.6" y="384.6" font-size="7.3" class="ml" text-anchor="end">Brevard</text></svg>
+      <p class="route">Rest, go for a swim at Lake Powhatan, or take a short spin on the Parkway.</p>
+      <ul class="hl"><li>Sleep in.</li><li><b>Lake Powhatan</b>, a swimming beach a few miles from camp.</li><li>Maybe a short spin up to the Parkway, or a coffee in Brevard.</li></ul><p class="night"><b>Tonight:</b> Wash Creek, last night of the trip.</p><div class="actions"><button class="btn" type="button">Mark done</button></div>
+    </div>
+  </li>
+
+  <li class="day" data-day="7">
+    <span class="num">7</span>
+    <div class="card">
+      <h3>Home to Charleston</h3>
+      <p class="meta">About 4 hours home. Scenic roads, then interstate.</p><svg class="map" viewBox="86.8 159.4 2223.9 1390.0" role="img" aria-label="Map of day 7"><rect x="86.8" y="159.4" width="2223.9" height="1390.0" class="mbg"/><polyline points="981.2,610.0 863.9,526.8 807.3,452.0 776.0,437.6 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 720.1,353.6 656.3,334.8 608.0,295.2 550.8,289.2 507.0,307.6 460.2,347.6 422.3,382.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 339.9,340.0 317.1,348.0 271.3,334.0 230.4,334.4 268.7,350.4" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 337.3,257.6 389.0,188.0 406.9,210.0 478.2,206.0 514.8,235.6 550.8,289.2 507.0,307.6 470.7,332.0 431.5,328.0 389.9,350.8 366.1,326.0" class="mfaint"/><polyline points="366.1,326.0 353.3,293.2 385.7,306.0 431.5,328.0 470.7,332.0 528.9,407.2 565.5,433.2 589.3,458.8 621.7,435.6 711.2,422.8 740.7,386.8 767.8,339.6" class="mfaint"/><polyline points="767.8,339.6 776.3,286.8" class="mfaint"/><polyline points="767.8,339.6 740.7,386.8 1002.8,500.4 1297.6,880.0 1656.8,1369.2" class="mfaint"/><polyline points="767.8,339.6 740.7,386.8 1002.8,500.4 1297.6,880.0 1656.8,1369.2" class="mroute"/><circle cx="767.8" cy="339.6" r="24.9" class="mend"/><circle cx="1656.8" cy="1369.2" r="24.9" class="mend"/><path d="M767.8 271.5 L713.3 373.6 L822.2 373.6Z" class="mcamp"/><text x="809.4" y="316.9" font-size="75.6" class="ml">Wash Creek</text><circle cx="1002.8" cy="500.4" r="17.8" class="mdot"/><text x="961.2" y="477.7" font-size="75.6" class="ml" text-anchor="end">Spartanburg</text><circle cx="1656.8" cy="1369.2" r="17.8" class="mdot"/><text x="1615.3" y="1346.5" font-size="75.6" class="ml" text-anchor="end">Charleston</text></svg>
+      <div class="shields"><span class="shield">US 276</span><span class="shield">I-26</span></div>
+      <p class="route">Ride scenic roads down out of the mountains toward Spartanburg. Once the fun riding is done, hop on I-26 and run straight into Charleston.</p>
+      <ul class="hl"><li>Down out of the mountains on the scenic route toward Spartanburg.</li><li><b>I-26</b> from there straight into Charleston. Home by afternoon.</li></ul><p class="night"><b>Tonight:</b> Home in Charleston.</p><div class="actions"><a class="btn primary" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Yellow+Gap+Road,+Pisgah+National+Forest,+NC&destination=Charleston,+SC&waypoints=Spartanburg,+SC&travelmode=driving">Open in Maps</a><button class="btn" type="button">Mark done</button></div>
+    </div>
+  </li>
+</ol>
+
+<section class="notes">
+  <h2>At camp</h2>
+  <div class="note"><b>Leave at camp:</b> your tent, sleeping bag, and pad. Stake and guy the tent well in case of afternoon storms.</div>
+  <div class="note"><b>Take with you or lock up:</b> food, toiletries, trash, and anything scented, because this is bear country. Also take your documents, electronics, and tools.</div>
+  <div class="note"><b>Dispersed rules:</b> sites are free and first come, first served. Pack out everything you bring in.</div>
+</section>
+
+<footer>Mileage and times are rough riding estimates and don't include stops. Sketch maps show the shape of each day, not exact roads. Live location comes from Glympse and only updates while Jerome is sharing.</footer>
+</div>
+
+<script>
+(function(){
+  var KEY="grandloop-done";
+  var done={};
+  try{done=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){done={};}
+  document.querySelectorAll(".day").forEach(function(li){
+    var d=li.getAttribute("data-day");
+    var btn=li.querySelector("button");
+    function render(){
+      li.classList.toggle("done",!!done[d]);
+      btn.textContent=done[d]?"Done ✓":"Mark done";
+      btn.setAttribute("aria-pressed",done[d]?"true":"false");
+    }
+    btn.addEventListener("click",function(){
+      done[d]=!done[d];
+      try{localStorage.setItem(KEY,JSON.stringify(done));}catch(e){}
+      render();
+    });
+    render();
+  });
+})();
+</script>
+</body>
+</html>
