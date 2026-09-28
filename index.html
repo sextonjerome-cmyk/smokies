@@ -435,34 +435,48 @@ footer{color:var(--muted);font-size:13.5px;padding:14px 20px 0;border-top:1px so
     render();
   });
 
-  // Jerome's own photos, pulled live from the GitHub repo (public, no login)
+  // Jerome's own photos: from the site backend (list.php), with GitHub as a fallback
   (function(){
     var REPO="sextonjerome-cmyk/smokies";
     function isImg(n){return /\.(jpe?g|png|gif|webp|heic)$/i.test(n);}
-    function camDefault(n){return /^(img[_-]|pxl[_-]|dsc|dcim|photo[_-]?\d|screenshot|\d{8})/i.test(n);}
-    function cap(n){var b=n.replace(/\.[^.]+$/,"").replace(/[_-]+/g," ").trim();return camDefault(n)?"":b;}
+    function esc(t){var e=document.createElement("div");e.textContent=t||"";return e.innerHTML;}
+    function addPhotos(g, items){ // items: [{src, cap}]
+      if(!items.length) return 0;
+      items.forEach(function(it){
+        var fig=document.createElement("figure"); fig.className="ph";
+        fig.innerHTML='<img loading="lazy" decoding="async" alt="'+esc(it.cap||"Photo from Jerome")+'" '
+          +'data-full="'+it.src+'" data-cap="'+esc(it.cap||"From Jerome")+'" data-page="#" data-credit="Jerome Sexton">'
+          +(it.cap?'<figcaption>'+esc(it.cap)+'</figcaption>':'');
+        fig.querySelector("img").src=it.src;
+        g.appendChild(fig);
+      });
+      var box=g.closest(".mine"); if(box) box.hidden=false;
+      return items.length;
+    }
+    function fromGitHub(g,d){
+      fetch("https://api.github.com/repos/"+REPO+"/contents/photos/day"+d+"?ref=main",
+        {headers:{Accept:"application/vnd.github+json"}})
+      .then(function(r){return r.ok?r.json():[];})
+      .then(function(arr){
+        if(!Array.isArray(arr))return;
+        var items=arr.filter(function(f){return f.type==="file"&&isImg(f.name);})
+          .sort(function(a,b){return a.name<b.name?-1:1;})
+          .map(function(f){
+            var b=f.name.replace(/\.[^.]+$/,"").replace(/[_-]+/g," ").trim();
+            var cam=/^(img[_-]|pxl[_-]|dsc|dcim|photo[_-]?\d|screenshot|\d{8})/i.test(f.name);
+            return {src:f.download_url, cap:cam?"":b};
+          });
+        addPhotos(g,items);
+      }).catch(function(){});
+    }
     document.querySelectorAll(".mygal").forEach(function(g){
       var d=g.getAttribute("data-myday");
-      var url="https://api.github.com/repos/"+REPO+"/contents/photos/day"+d+"?ref=main";
-      fetch(url,{headers:{Accept:"application/vnd.github+json"}}).then(function(r){
-        return r.ok?r.json():[];
-      }).then(function(arr){
-        if(!Array.isArray(arr))return;
-        var added=0;
-        arr.filter(function(f){return f.type==="file"&&isImg(f.name);})
-           .sort(function(a,b){return a.name<b.name?-1:1;})
-           .forEach(function(f){
-          var raw=f.download_url; var c=cap(f.name);
-          var fig=document.createElement("figure");
-          fig.className="ph";
-          fig.innerHTML='<img loading="lazy" decoding="async" alt="'+(c||"Photo from Jerome")+'" '
-            +'data-full="'+raw+'" data-cap="'+(c||"From Jerome")+'" data-page="#" data-credit="Jerome Sexton">'
-            +(c?'<figcaption>'+c+'</figcaption>':'');
-          fig.querySelector("img").src=raw;
-          g.appendChild(fig); added++;
-        });
-        if(added){var box=g.closest(".mine"); if(box) box.hidden=false;}
-      }).catch(function(){});
+      fetch("list.php?day="+d).then(function(r){
+        if(!r.ok) throw 0; return r.json();
+      }).then(function(j){
+        var items=(j.photos||[]).map(function(p){return {src:"photos/day"+d+"/"+p.file, cap:p.caption};});
+        if(items.length) addPhotos(g,items); else fromGitHub(g,d);
+      }).catch(function(){ fromGitHub(g,d); });
     });
   })();
 
