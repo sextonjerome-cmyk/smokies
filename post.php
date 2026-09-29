@@ -1,7 +1,7 @@
 <?php
 // Simple photo upload backend for the Smokies trip page.
 $PW = "dragon2026";
-$days = ["1","2","3","4","5","6","7"];
+$days = ["0","1","2","3","4","5","6","7","8"];
 $msg = ""; $ok = false;
 
 function capfile($d){ return __DIR__."/photos/day".$d."/_captions.json"; }
