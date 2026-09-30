@@ -477,16 +477,26 @@ footer{color:var(--muted);font-size:13.5px;padding:14px 20px 0;border-top:1px so
 
 <script>
 (function(){
-  // mark done
-  var KEY="grandloop-done", done={};
-  try{done=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){done={};}
+  // mark done: shared for everyone via done.php; changing it needs the trip password
+  var done={}, PWK="grandloop-pw", btns=[];
   document.querySelectorAll(".day").forEach(function(li){
     var d=li.getAttribute("data-day"), btn=li.querySelector("button");
     if(!btn) return;
-    function render(){li.classList.toggle("done",!!done[d]);btn.textContent=done[d]?"Done ✓":"Mark done";btn.setAttribute("aria-pressed",done[d]?"true":"false");}
-    btn.addEventListener("click",function(){done[d]=!done[d];try{localStorage.setItem(KEY,JSON.stringify(done));}catch(e){}render();});
+    function render(){li.classList.toggle("done",!!done[d]);btn.textContent=done[d]?"Done \u2713":"Mark done";btn.setAttribute("aria-pressed",done[d]?"true":"false");}
+    btns.push(render);
+    btn.addEventListener("click",function(){
+      var pw=""; try{pw=localStorage.getItem(PWK)||"";}catch(e){}
+      if(!pw){pw=prompt("Trip password to mark days done:")||""; if(!pw) return;}
+      var body=new URLSearchParams({pw:pw,day:d,done:done[d]?"0":"1"});
+      fetch("done.php",{method:"POST",body:body}).then(function(r){
+        if(r.status===403){try{localStorage.removeItem(PWK);}catch(e){} alert("Wrong password."); return null;}
+        try{localStorage.setItem(PWK,pw);}catch(e){}
+        return r.json();
+      }).then(function(j){ if(j&&j.done){done=j.done; btns.forEach(function(f){f();});} }).catch(function(){alert("Could not save. Check your signal and try again.");});
+    });
     render();
   });
+  fetch("done.php",{cache:"no-store"}).then(function(r){return r.json();}).then(function(j){ if(j&&j.done){done=j.done; btns.forEach(function(f){f();});} }).catch(function(){});
 
   // Jerome's own photos: from the site backend (list.php), with GitHub as a fallback
   (function(){
