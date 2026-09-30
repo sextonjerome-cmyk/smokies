@@ -3,7 +3,7 @@
 // only someone with the trip password can change it.
 header("Content-Type: application/json");
 header("Cache-Control: no-store");
-$PW = "dragon2026";
+$PW = "ok";
 $dir = __DIR__."/state"; $f = $dir."/done.json";
 $done = is_file($f) ? (json_decode(file_get_contents($f), true) ?: []) : ["0"=>true,"1"=>true,"2"=>true,"3"=>true];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
