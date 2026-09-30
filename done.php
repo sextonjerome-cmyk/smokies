@@ -5,7 +5,8 @@ header("Content-Type: application/json");
 header("Cache-Control: no-store");
 $PW = "ok";
 $dir = __DIR__."/state"; $f = $dir."/done.json";
-$done = is_file($f) ? (json_decode(file_get_contents($f), true) ?: []) : ["0"=>true,"1"=>true,"2"=>true,"3"=>true];
+$defaults = ["0"=>true,"1"=>true,"2"=>true,"3"=>true,"4"=>true];
+$done = array_replace($defaults, is_file($f) ? (json_decode(file_get_contents($f), true) ?: []) : []);
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   if (($_POST["pw"] ?? "") !== $PW) { http_response_code(403); echo json_encode(["error"=>"bad password"]); exit; }
   $d = preg_replace('/[^0-9]/','', $_POST["day"] ?? "");
